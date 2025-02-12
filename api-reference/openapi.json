@@ -1,94 +1,61 @@
 {
-  "openapi": "3.0.1",
-  "info": {
-    "title": "OpenAPI Plant Store",
-    "description": "A sample API that uses a plant store as an example to demonstrate features in the OpenAPI specification",
-    "license": {
-      "name": "MIT"
-    },
-    "version": "1.0.0"
-  },
+  "openapi": "3.0.3",
   "servers": [
     {
-      "url": "http://sandbox.mintlify.com"
+      "url": "https://eazyapi-service-production.up.railway.app/difaal21/barsquad-threads",
+      "description": "Default Server"
     }
   ],
-  "security": [
-    {
-      "bearerAuth": []
+  "info": {
+    "version": "1.0.0",
+    "title": "Barsquad Threads",
+    "description": "Project barsquad untuk portofolio",
+    "contact": {
+      "name": "difaal21"
     }
-  ],
+  },
   "paths": {
-    "/plants": {
-      "get": {
-        "description": "Returns all plants from the system that the user has access to",
-        "parameters": [
+    "/users-command/v1/users/login": {
+      "post": {
+        "summary": "Login",
+        "tags": [
+          "User Account Management"
+        ],
+        "security": [
           {
-            "name": "limit",
-            "in": "query",
-            "description": "The maximum number of results to return",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
+            "basicAuth": []
           }
         ],
-        "responses": {
-          "200": {
-            "description": "Plant response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Plant"
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Unexpected error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "description": "Creates a new plant in the store",
         "requestBody": {
-          "description": "Plant to add to the store",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/NewPlant"
-              }
-            }
-          },
-          "required": true
+          "$ref": "#/components/requestBodies/UserLogin"
         },
         "responses": {
           "200": {
-            "description": "plant response",
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Plant"
+                  "$ref": "#/components/schemas/UserLogin"
                 }
               }
             }
           },
           "400": {
-            "description": "unexpected error",
+            "description": "Bad Request",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "$ref": "#/components/schemas/InvalidCredential"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnverifiedAccount"
                 }
               }
             }
@@ -96,32 +63,520 @@
         }
       }
     },
-    "/plants/{id}": {
-      "delete": {
-        "description": "Deletes a single plant based on the ID supplied",
-        "parameters": [
+    "/users-command/v1/users/login/oauth": {
+      "post": {
+        "summary": "Login Oauth",
+        "tags": [
+          "User Account Management"
+        ],
+        "security": [
           {
-            "name": "id",
-            "in": "path",
-            "description": "ID of plant to delete",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
+            "basicAuth": []
           }
         ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/UserLoginOauth"
+        },
         "responses": {
-          "204": {
-            "description": "Plant deleted",
-            "content": {}
-          },
-          "400": {
-            "description": "unexpected error",
+          "200": {
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "$ref": "#/components/schemas/UserLogin"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidCredential"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserNotFound"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users-command/v1/users/registration": {
+      "post": {
+        "summary": "Registration",
+        "tags": [
+          "User Account Management"
+        ],
+        "security": [
+          {
+            "basicAuth": []
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/UserRegistration"
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserRegistration"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "appli4cation/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserAlreadyExist"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users-command/v1/users/registration/oauth": {
+      "post": {
+        "summary": "Registration Oauth",
+        "tags": [
+          "User Account Management"
+        ],
+        "security": [
+          {
+            "basicAuth": []
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/UserRegistrationOauth"
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SetPasswordV2"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "appli4cation/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserAlreadyExist"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users-command/v1/users/account/email-validation": {
+      "post": {
+        "summary": "Email Validation",
+        "tags": [
+          "User Account Management"
+        ],
+        "security": [
+          {
+            "basicAuth": []
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/EmailValidation"
+        },
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "VERIFIED_EMAIL": {
+                    "value": {
+                      "code": 200,
+                      "status": "VERIFIED_EMAIL",
+                      "data": null,
+                      "message": "verified account"
+                    }
+                  },
+                  "UNVERIFIED_EMAIL": {
+                    "value": {
+                      "code": 200,
+                      "status": "UNVERIFIED_EMAIL",
+                      "data": null,
+                      "message": "unverified account"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "appli4cation/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmailNotFound"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users-command/v1/users/account-activation": {
+      "post": {
+        "summary": "Account Activation",
+        "tags": [
+          "User Account Management"
+        ],
+        "security": [
+          {
+            "basicAuth": []
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/UserAccountActivation"
+        },
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserAccountActivation"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "appli4cation/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidOTP"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users-command/v1/users/account-activation/send": {
+      "post": {
+        "summary": "Request Email to Activate Account",
+        "tags": [
+          "User Account Management"
+        ],
+        "security": [
+          {
+            "basicAuth": []
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/EmailValidation"
+        },
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RequestEmailToActivateAccount"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForbiddenToRequestEmailActivation"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "NotFound",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmailNotFound"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "To Many Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TooManyRequestEmailActivation"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users-command/v2/users/registration": {
+      "post": {
+        "summary": "Registration V2",
+        "tags": [
+          "User Account Management"
+        ],
+        "security": [
+          {
+            "basicAuth": []
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/UserRegistrationV2"
+        },
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserRegistrationV2"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users-command/v2/users/account/email-verification": {
+      "post": {
+        "summary": "Email Verification V2",
+        "tags": [
+          "User Account Management"
+        ],
+        "security": [
+          {
+            "basicAuth": []
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/EmailVerificationV2"
+        },
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserRegistrationV2"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidOTP"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "appli4cation/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserAlreadyExist"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users-command/v2/users/account/credential": {
+      "post": {
+        "summary": "Set Password V2",
+        "tags": [
+          "User Account Management"
+        ],
+        "security": [
+          {
+            "basicAuth": []
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/SetPasswordV2"
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SetPasswordV2"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "appli4cation/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserAlreadyExist"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users-command/v1/users/account/forgot-password": {
+      "post": {
+        "summary": "Request Email Forgot Password",
+        "tags": [
+          "User Account Management"
+        ],
+        "security": [
+          {
+            "basicAuth": []
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/EmailValidation"
+        },
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RequestEmailForgotPassword"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnverifiedAccount"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmailNotFound"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users-command/v1/users/account/reset-password/confirmation": {
+      "post": {
+        "summary": "Reset Password Confirmation",
+        "tags": [
+          "User Account Management"
+        ],
+        "security": [
+          {
+            "basicAuth": []
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/ResetPasswordConfirmation"
+        },
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResetPasswordConfirmation"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidOTP"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users-command/v1/users/account/reset-password": {
+      "post": {
+        "summary": "Reset Password",
+        "tags": [
+          "User Account Management"
+        ],
+        "security": [
+          {
+            "basicAuth": []
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/SetNewPasswordFromForgotPassword"
+        },
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SetNewPasswordFromForgotPassword"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidCodeFromForgotPassword"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserNotFound"
                 }
               }
             }
@@ -131,65 +586,435 @@
     }
   },
   "components": {
-    "schemas": {
-      "Plant": {
-        "required": [
-          "name"
-        ],
-        "type": "object",
-        "properties": {
-          "name": {
-            "description": "The name of the plant",
-            "type": "string"
-          },
-          "tag": {
-            "description": "Tag to specify the type",
-            "type": "string"
-          }
+    "parameters": {
+      "HTTP-code": {
+        "name": "http-code",
+        "schema": {
+          "type": "integer"
+        },
+        "in": "query",
+        "required": false,
+        "description": "**Query ini hanya digunakan untuk `keperluan Mock Up` agar bisa mendapatkan hasil response code yang dinamis. Isi value berupa HTTP Response Code yang telah di dokumentasikan**",
+        "example": 200
+      },
+      "X-HTTP-Code": {
+        "in": "header",
+        "name": "X-HTTP-Code",
+        "description": "**Header ini hanya digunakan untuk `keperluan Mock Up` agar bisa mendapatkan hasil response code yang dinamis. Isi value berupa HTTP Response Code yang telah di dokumentasikan**",
+        "schema": {
+          "type": "integer",
+          "example": 404
         }
       },
-      "NewPlant": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Plant"
+      "X-Multiple-Response": {
+        "in": "header",
+        "name": "X-Multiple-Response",
+        "description": "**Header ini hanya digunakan untuk `keperluan Mock Up` agar bisa mendapatkan hasil response code yang dinamis**",
+        "schema": {
+          "type": "string",
+          "example": "Login"
+        }
+      }
+    },
+    "schemas": {
+      "ResetPasswordConfirmation": {
+        "type": "object",
+        "example": {
+          "code": 200,
+          "status": "OK",
+          "data": null,
+          "message": ""
+        }
+      },
+      "UserNotFound": {
+        "type": "object",
+        "example": {
+          "code": 404,
+          "status": "NOT_FOUND",
+          "data": null,
+          "message": "user not found"
+        }
+      },
+      "InvalidCodeFromForgotPassword": {
+        "type": "object",
+        "example": {
+          "code": 400,
+          "status": "INVALID_CODE",
+          "data": null,
+          "message": "invalid code or code has already been used"
+        }
+      },
+      "InvalidToken": {
+        "type": "object",
+        "example": {
+          "code": 400,
+          "status": "INVALID_TOKEN",
+          "data": null,
+          "message": "invalid token"
+        }
+      },
+      "SetNewPasswordFromForgotPassword": {
+        "type": "object",
+        "example": {
+          "code": 200,
+          "data": null,
+          "status": "OK",
+          "message": "Password set successfully"
+        }
+      },
+      "RequestEmailForgotPassword": {
+        "type": "object",
+        "example": {
+          "code": 200,
+          "data": {
+            "forgotPasswordSession": "52ab21b8-5893-4058-aa4f-86eb9b2df127"
           },
-          {
-            "required": [
-              "id"
-            ],
-            "type": "object",
-            "properties": {
-              "id": {
-                "description": "Identification number of the plant",
-                "type": "integer",
-                "format": "int64"
+          "status": "OK",
+          "message": "The message delivery is in progress"
+        }
+      },
+      "SetPasswordV2": {
+        "type": "object",
+        "example": {
+          "code": 201,
+          "status": "CREATED",
+          "data": {
+            "name": "Fall Out Boy",
+            "email": "falloutboy928@gmail.com",
+            "token": {
+              "value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0YjE4NDUzOTg1OGQ5MzU1ZTBmMzY4ZCIsIm5hbWUiOiJGYWxsIE91dCBCb3kiLCJlbWFpbCI6ImZhbGxvdXRib3k5MjhAZ21haWwuY29tIiwiZW1haWxJc1ZlcmlmaWVkIjpmYWxzZSwiZXhwIjoxNjg5NjE0NTc4fQ.xbBnV73EtJBOgnEXOK388YSHD5P3MIiC-C5x6IbyJBgOR37ABjvN0TVfi_ByoXm2kvZ0E8QW4TESi7T45I3WxqSxSMPRnUzPII-jtenGm2NOi2hFXKOyx0DWicYOrlpF0InWPd8BToJk3PkhEH-gpiOu_IelilHIW6XSHWHC5lDk_ax4XN0UZTkv7p4sZewbGIoY_F1cXK-zxTWM1cexRC3B2KIdxw6d_SUObdBtJGcvX79E9bhSrMBhvj71AAFi1MDHYQlkEDLMzdyqVKQ3sa8YcV1JAqrhkCVJd-9GGDQ88pev-QXj1NCXMJZG-4nS5dL4lMa-Z8YIqXSorP5BZw",
+              "expiresIn": 1689614578
+            }
+          },
+          "message": "registration successful"
+        }
+      },
+      "UserRegistrationV2": {
+        "type": "object",
+        "example": {
+          "code": 200,
+          "status": "OK",
+          "data": {
+            "registrationSession": "adc2e3e9-37f6-4932-a7db-e884a07996f8"
+          },
+          "message": "registration successful"
+        }
+      },
+      "TooManyRequestEmailActivation": {
+        "type": "object",
+        "example": {
+          "code": 429,
+          "status": "EXCEEDS_LIMIT",
+          "data": {
+            "numberOfActivation": 2
+          },
+          "message": "You have exceeded the specified limit, please try again tomorrow"
+        }
+      },
+      "ForbiddenToRequestEmailActivation": {
+        "type": "object",
+        "example": {
+          "code": 403,
+          "status": "EMAIL_VERIFIED",
+          "data": null,
+          "message": "Email has already been verified"
+        }
+      },
+      "RequestEmailToActivateAccount": {
+        "type": "object",
+        "example": {
+          "code": 200,
+          "status": "OK",
+          "data": {
+            "numberOfActivation": 1
+          },
+          "message": "The message delivery is in progress"
+        }
+      },
+      "EmailNotFound": {
+        "type": "object",
+        "example": {
+          "code": 404,
+          "status": "NOT_FOUND",
+          "data": null,
+          "message": "email not found"
+        }
+      },
+      "InvalidOTP": {
+        "type": "object",
+        "example": {
+          "code": 400,
+          "status": "INVALID_OTP",
+          "data": null,
+          "message": "invalid otp"
+        }
+      },
+      "UserAccountActivation": {
+        "type": "object",
+        "example": {
+          "code": 200,
+          "status": "OK",
+          "data": null,
+          "message": "activate account success"
+        }
+      },
+      "UserAlreadyExist": {
+        "type": "object",
+        "example": {
+          "code": 409,
+          "status": "DUPLICATED_EMAIL",
+          "data": null,
+          "message": "user already exist"
+        }
+      },
+      "UserRegistration": {
+        "type": "object",
+        "example": {
+          "code": 201,
+          "status": "CREATED",
+          "data": {
+            "id": "64ac2bc22c84d222a228ed2f",
+            "profilePicture": "",
+            "name": "Internship app",
+            "email": "internship.app21@gmail.com",
+            "emailIsVerified": false,
+            "emailVerifiedAt": null,
+            "gender": "",
+            "dateOfBirth": "2021-08-21",
+            "password": null,
+            "biography": "",
+            "link": [],
+            "isPrivate": true,
+            "accountType": "personal",
+            "createdAt": "2023-07-10T16:03:14.191198Z",
+            "updatedAt": null
+          },
+          "message": "registration successful"
+        }
+      },
+      "InvalidCredential": {
+        "type": "object",
+        "example": {
+          "code": 400,
+          "status": "BAD_REQUEST",
+          "data": null,
+          "message": "invalid credential"
+        }
+      },
+      "UnverifiedAccount": {
+        "type": "object",
+        "example": {
+          "code": 403,
+          "status": "UNVERIFIED_EMAIL",
+          "data": null,
+          "message": "unverified account"
+        }
+      },
+      "UserLogin": {
+        "type": "object",
+        "example": {
+          "code": 200,
+          "status": "OK",
+          "data": {
+            "name": "Difa Al Fansha",
+            "email": "difaal21@gmail.com",
+            "token": {
+              "value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0YWMyYjBkMmM4NGQyMjJhMjI4ZWQyZSIsIm5hbWUiOiJEaWZhIEFsIEZhbnNoYSIsImVtYWlsIjoiZGlmYWFsMjFAZ21haWwuY29tIiwiZW1haWxJc1ZlcmlmaWVkIjpmYWxzZSwiZXhwIjoxNjg5MjY0ODg1fQ.dXK-LeuaTYlp2xM0lKWaNng3oIg-qFdSjRRBNPtsBPOu7MKx43pUVWvLhojEmMPLTu-g_GP3Djfbzhxc9lAKUiVnuBN9sGMFtx5QmXjtkbLImegk0A9tCXWo5w0BmQhiRt5mVmLokXxu8GoymtikQB42G5kch9hMth6KI6VOvW9bYvPz7UODcMKkthjuRHcAC1DS02Vb_iksXorXfiGYt6QuaZG_wBjbdA3tMe760KAsnS4rPHSwczSMuz2Hx7BrVtwuS5NbpnYFAjg-qbKdvd-GfncPE_Oz6qUHJABc7Kwp_u6bDDQViLnQeeWDTQYv9vYVFZxSZ8z3iKVxIiKGoA",
+              "expiresIn": 1689264885
+            }
+          },
+          "message": ""
+        }
+      }
+    },
+    "requestBodies": {
+      "UserRegistrationOauth": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "example": {
+                "name": "Budi Pratama",
+                "token": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0YWRmNzEyY2ZjYzJmZDViNWVhMGFmNSIsIm5hbWUiOiJEaWZhIEFsIEZhbnNoYSIsImVtYWlsIjoiZGlmYWFsMjFAZ21haWwuY29tIiwiZW1haWxJc1ZlcmlmaWVkIjpmYWxzZSwiZXhwIjoxNjkwMjc2MDQyfQ.sDvqzFWX2TKoR72NR2PnL00EauoYIOcnw0nC1dV9IXfpZhIpoIEJq4vgugAgWpRESCXR5HGbm-l20soItug6ZCG1SwmQxV0h5MgTMqvkBf0qoS8fiIwxEUiMI5lwIGyDaejo-Ui-FRAfuTKymHCdsaz7rjTs9iLzd72IyUyCzLVss5GrEfGiIEoskdTXUh0q8CO2ZwOIaXhoPofJYYOahPhMNHPZV5y-YCXA7qS2XEnB99v4w5XGUnDma46HtMv34rySsB_Y2pfC_C9zem4XYsv5ckUOgyr23Y2kTefQIU5NJkI8yd-HEOiLE0TSizd2EElscKSPUyFH7h4fLVvnHQ",
+                "dateOfBirth": "1999-08-21",
+                "provider": "google"
               }
             }
           }
-        ]
+        }
       },
-      "Error": {
-        "required": [
-          "error",
-          "message"
-        ],
-        "type": "object",
-        "properties": {
-          "error": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "message": {
-            "type": "string"
+      "UserLoginOauth": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "example": {
+                "token": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0YWRmNzEyY2ZjYzJmZDViNWVhMGFmNSIsIm5hbWUiOiJEaWZhIEFsIEZhbnNoYSIsImVtYWlsIjoiZGlmYWFsMjFAZ21haWwuY29tIiwiZW1haWxJc1ZlcmlmaWVkIjpmYWxzZSwiZXhwIjoxNjkwMjc2MDQyfQ.sDvqzFWX2TKoR72NR2PnL00EauoYIOcnw0nC1dV9IXfpZhIpoIEJq4vgugAgWpRESCXR5HGbm-l20soItug6ZCG1SwmQxV0h5MgTMqvkBf0qoS8fiIwxEUiMI5lwIGyDaejo-Ui-FRAfuTKymHCdsaz7rjTs9iLzd72IyUyCzLVss5GrEfGiIEoskdTXUh0q8CO2ZwOIaXhoPofJYYOahPhMNHPZV5y-YCXA7qS2XEnB99v4w5XGUnDma46HtMv34rySsB_Y2pfC_C9zem4XYsv5ckUOgyr23Y2kTefQIU5NJkI8yd-HEOiLE0TSizd2EElscKSPUyFH7h4fLVvnHQ",
+                "provider": "google"
+              }
+            }
+          }
+        }
+      },
+      "ResetPasswordConfirmation": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "example": {
+                "forgotPasswordSession": "52ab21b8-5893-4058-aa4f-86eb9b2df127",
+                "otp": "123456"
+              }
+            }
+          }
+        }
+      },
+      "SetNewPasswordFromForgotPassword": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "example": {
+                "forgotPasswordSession": "52ab21b8-5893-4058-aa4f-86eb9b2df127",
+                "password": "123456"
+              }
+            }
+          }
+        }
+      },
+      "SetPasswordV2": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "example": {
+                "registrationSession": "52ab21b8-5893-4058-aa4f-86eb9b2df127",
+                "password": "123456"
+              }
+            }
+          }
+        }
+      },
+      "EmailVerificationV2": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "example": {
+                "registrationSession": "6c78cd5e-d229-4ad8-84e7-c845b9069f5a",
+                "otp": "683165"
+              }
+            }
+          }
+        }
+      },
+      "UserRegistrationV2": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "example": {
+                "name": "Fall Out Boy",
+                "email": "falloutboy928@gmail.com",
+                "dateOfBirth": "1999-08-21"
+              }
+            }
+          }
+        }
+      },
+      "EmailValidation": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "example": {
+                "email": "difaal21@gmail.com"
+              }
+            }
+          }
+        }
+      },
+      "UserAccountActivation": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "example": {
+                "token": "b268d20e-481e-45ce-abba-637aeab0eb55",
+                "otp": "697087"
+              }
+            }
+          }
+        }
+      },
+      "UserRegistration": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "example": {
+                "name": "Difa Al Fansha",
+                "email": "Difaal21@gmail.com",
+                "password": "123456",
+                "dateOfBirth": "1999-08-21"
+              }
+            }
+          }
+        }
+      },
+      "UserLogin": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "example": {
+                "email": "Difaal21@gmail.com",
+                "password": "123456"
+              }
+            }
+          }
+        }
+      }
+    },
+    "responses": {
+      "UserLogin": {
+        "description": "OK",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "example": {
+                "data": {
+                  "email": "difaal21@gmail.com",
+                  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+                },
+                "message": null,
+                "status": "OK",
+                "code": 200
+              }
+            }
           }
         }
       }
     },
     "securitySchemes": {
+      "basicAuth": {
+        "type": "http",
+        "scheme": "basic"
+      },
       "bearerAuth": {
         "type": "http",
-        "scheme": "bearer"
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
       }
     }
-  }
+  },
+  "security": [
+    {
+      "basicAuth": []
+    },
+    {
+      "bearerAuth": []
+    }
+  ]
 }
