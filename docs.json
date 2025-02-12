@@ -50,6 +50,10 @@
               "api-reference/endpoint/create",
               "api-reference/endpoint/delete"
             ]
+          },
+          {
+            "group": "Barsquad",
+            "source": "/api-reference/openapi.json"
           }
         ]
       }
